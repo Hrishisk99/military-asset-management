@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes.js";
 import baseRoutes from "./routes/baseRoutes.js";
+import assetRoutes from "./routes/assetRoutes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/bases", baseRoutes);
+app.use("/api/assets", assetRoutes);
 
 app.get("/", (req, res) => {
   res.json({
