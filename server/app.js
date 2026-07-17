@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes.js";
+import baseRoutes from "./routes/baseRoutes.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use("/api/bases", baseRoutes);
 
 app.get("/", (req, res) => {
   res.json({

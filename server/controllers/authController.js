@@ -8,7 +8,7 @@ import generateToken from "../utils/generateToken.js";
  */
 export const registerUser = async (req, res) => {
   try {
-    const { fullName, email, password, role } = req.body;
+    const { fullName, email, password, role, base } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({
@@ -28,6 +28,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       role,
+      base: base || null,
     });
 
     const token = generateToken(user._id);
@@ -42,6 +43,7 @@ export const registerUser = async (req, res) => {
           fullName: user.fullName,
           email: user.email,
           role: user.role,
+          base: user.base,
           isActive: user.isActive,
         },
       },
@@ -65,7 +67,6 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Include password explicitly
     const user = await User.findOne({
       email: email.toLowerCase(),
     }).select("+password");
@@ -105,6 +106,7 @@ export const loginUser = async (req, res) => {
           fullName: user.fullName,
           email: user.email,
           role: user.role,
+          base: user.base,
           isActive: user.isActive,
         },
       },
@@ -123,8 +125,19 @@ export const loginUser = async (req, res) => {
  * @access  Private
  */
 export const getCurrentUser = async (req, res) => {
-  return res.status(200).json({
-    success: true,
-    data: req.user,
-  });
+  try {
+    const user = await User.findById(req.user._id)
+      .select("-password")
+      .populate("base", "name location");
+
+    return res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

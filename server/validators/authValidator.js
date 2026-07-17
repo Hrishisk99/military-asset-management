@@ -2,10 +2,7 @@ import { body } from "express-validator";
 import { ROLE_VALUES } from "../constants/roles.js";
 
 export const registerValidator = [
-  body("fullName")
-    .trim()
-    .notEmpty()
-    .withMessage("Full name is required."),
+  body("fullName").trim().notEmpty().withMessage("Full name is required."),
 
   body("email")
     .isEmail()
@@ -16,10 +13,9 @@ export const registerValidator = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long."),
 
-  body("role")
-    .optional()
-    .isIn(ROLE_VALUES)
-    .withMessage("Invalid role."),
+  body("role").optional().isIn(ROLE_VALUES).withMessage("Invalid role."),
+
+  body("base").optional().isMongoId().withMessage("Invalid Base ID"),
 ];
 
 export const loginValidator = [
@@ -28,7 +24,5 @@ export const loginValidator = [
     .withMessage("Please provide a valid email.")
     .normalizeEmail(),
 
-  body("password")
-    .notEmpty()
-    .withMessage("Password is required."),
+  body("password").notEmpty().withMessage("Password is required."),
 ];

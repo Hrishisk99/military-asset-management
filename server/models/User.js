@@ -31,6 +31,13 @@ const userSchema = new mongoose.Schema(
       default: ROLES.LOGISTICS_OFFICER,
     },
 
+    // Assigned military base
+    base: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Base",
+      default: null,
+    },
+
     isActive: {
       type: Boolean,
       default: true,
